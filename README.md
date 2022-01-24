@@ -1,5 +1,5 @@
-# VSCode LSP Example
+# VSCode LSP Reglace
 
-A VSCode Language Server Protocol sample forks from Microsoft/vscode-extension-samples.
+Replace by regex
 
 No more...
