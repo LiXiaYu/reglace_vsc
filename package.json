@@ -8,8 +8,19 @@
 		"vscode": "^1.43.0"
 	},
 	"activationEvents": [
-		"onLanguage:plaintext"
+		"onLanguage:cpp"
 	],
+	"contributes": {
+		"languages": [
+			{
+				"id": "cpp",
+				"extensions": [
+					".rcpp",
+					".rh"
+				]
+			}
+		]
+	},
 	"main": "./client/out/extension",
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
