@@ -1,0 +1,16 @@
+[
+    {
+        "name": "all_block",
+        "rule": {
+            "search": "func\s+(\S+)(\((?:[^)(]+|\((?:[^)(]+|\([^)(]*\))*\))*\))",
+            "replace": "auto$1$2"
+        }
+    },
+    {
+        "name": "mate_name",
+        "rule": {
+            "search": "(?:\\S)mate(?:\\S)",
+            "replace": "class"
+        }
+    }
+]

@@ -65,6 +65,20 @@ documents.listen(connection);
 // Listen on the connection
 connection.listen();
 
+import { version } from 'process';
+console.log(`Version: ${version}`);
+
+import XRegExp = require('xregexp');
+const a = XRegExp.matchRecursive("((11),(22,(33,44)))", ',', '\\)', 'g');
+let ams: string;
+if (a == null) {
+  ams = "No Search";
+}
+else {
+  ams = a[0];
+}
+console.log(ams);
+
 // 增量错误诊断
 documents.onDidChangeContent((change) => {
   const textDocument = change.document;
@@ -76,6 +90,9 @@ documents.onDidChangeContent((change) => {
 
   let problems = 0;
   const diagnostics: Diagnostic[] = [];
+
+  //const reg5 = /\((?:[^)(]+|\((?:[^)(]+|\([^)(]*\))*\))*\)/g;
+
   while ((m = pattern.exec(text))) {
     problems++;
     const diagnostic: Diagnostic = {

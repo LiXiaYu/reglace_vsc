@@ -1,0 +1,16 @@
+[
+    {
+        "name": "mate_name",
+        "rule": {
+            "search": "^mate(?:\\s)",
+            "replace": "class"
+        }
+    },
+    {
+        "name": "mate_name",
+        "rule": {
+            "search": "(?:\\s)mate(?:\\s)",
+            "replace": "class"
+        }
+    }
+]

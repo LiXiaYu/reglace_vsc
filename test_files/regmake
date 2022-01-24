@@ -1,2 +1,0 @@
-rule1.reglace test1.rcpp test1.cpp
-rule1.reglace rule2.reglace test2.rcpp test2.cpp

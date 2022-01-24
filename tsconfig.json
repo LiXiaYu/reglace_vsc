@@ -1,13 +1,27 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es2019",
-    "lib": ["ES2019"],
+    "target": "ES2021",
+    "lib": [
+      "ES2021"
+    ],
     "outDir": "out",
     "rootDir": "src",
     "sourceMap": true
   },
-  "include": ["src"],
-  "exclude": ["node_modules", ".vscode-test"],
-  "references": [{ "path": "./client" }, { "path": "./server" }]
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    ".vscode-test"
+  ],
+  "references": [
+    {
+      "path": "./client"
+    },
+    {
+      "path": "./server"
+    }
+  ]
 }

@@ -1,0 +1,25 @@
+[
+    {
+        "rules": [
+            "rule1.reglace"
+        ],
+        "replace": [
+            {
+                "src": "test1.rcpp",
+                "out": "test1.cpp"
+            }
+        ]
+    },
+    {
+        "rules": [
+            "rule1.reglace",
+            "rule2.reglace"
+        ],
+        "replace": [
+            {
+                "src": "test2.rcpp",
+                "out": "test2.cpp"
+            }
+        ]
+    }
+]

@@ -18,6 +18,18 @@
 					".rcpp",
 					".rh"
 				]
+			},
+			{
+				"id": "json",
+				"extensions": [
+					".reglace"
+				]
+			},
+			{
+				"id": "regmake",
+				"extensions": [
+					".regmake"
+				]
 			}
 		]
 	},
