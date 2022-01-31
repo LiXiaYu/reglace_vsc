@@ -4,7 +4,6 @@
     let outFileContent=srcFileContent;
     //let_to_auto
     outFileContent=outFileContent.replaceAll(/(^|[\s\n\r])let([\s\n\r])/g, "$1auto$2");
-    console.log("let_to_auto\n", outFileContent);
 
     //function_to_auto
     let matches=outFileContent.matchAll(/(^|[\s\n\r])(function)([\s\n\r])(\S+)(\s*)(\()((?:[^)(]+|\((?:[^)(]+|\([^)(]*\))*\))*)(\))/g);
@@ -12,6 +11,7 @@
     let parameterSnumber=7;
     let addLength=0;
     for (let match of matches) {
+        //parameter to auto parameter
         let parameterstring=match[parameterSnumber];
         //  1 - 6 elements string length sum
         let index=match.index;
@@ -43,6 +43,7 @@
         outFileContent=outFileContent.substring(0,index)+newparameterstring+outFileContent.substring(index+length);
         addLength+=newparameterstring.length-length;
 
+        //function keyword to auto
         let function_index=match.index;
         for(let i=1;i<functionkeywordSnumber;i++)
         {

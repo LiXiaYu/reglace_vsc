@@ -1,3 +1,5 @@
+auto a = [ ];
+auto b = [ ];
 
 auto test( auto x, auto  y, auto  z) {
   x.length = 0, x[0] = "hello";  // modifies the array that `x` would reference
