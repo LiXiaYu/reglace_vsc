@@ -1,16 +1,16 @@
 [
     {
-        "name": "mate_name",
+        "name": "mate_name_0",
         "rule": {
-            "search": "^mate(?:\\s)",
-            "replace": "class"
+            "search": "^mate([\\s\\n\\r])",
+            "replace": "class$1"
         }
     },
     {
-        "name": "mate_name",
+        "name": "mate_name_1",
         "rule": {
-            "search": "(?:\\s)mate(?:\\s)",
-            "replace": "class"
+            "search": "^mate([\\s\\n\\r])",
+            "replace": "class$1"
         }
     }
 ]

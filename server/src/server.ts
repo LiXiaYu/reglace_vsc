@@ -27,6 +27,9 @@ import {
 
 import { TextDocument } from "vscode-languageserver-textdocument";
 
+import * as fs from 'fs';
+import * as reglace from './reglace';
+
 // 关键点1： 初始化 LSP 连接对象
 const connection = createConnection(ProposedFeatures.all);
 
@@ -37,8 +40,11 @@ connection.onInitialize((params: InitializeParams) => {
   // 明确声明插件支持的语言特性
   const result: InitializeResult = {
     capabilities: {
-      // 增量处理
-      textDocumentSync: TextDocumentSyncKind.Incremental,
+      // 传全量模式
+      textDocumentSync: {
+        openClose: true,
+        change: TextDocumentSyncKind.Full
+      },
       // 代码补全
       completionProvider: {
         resolveProvider: true,
@@ -49,8 +55,6 @@ connection.onInitialize((params: InitializeParams) => {
       signatureHelpProvider: {
         triggerCharacters: ["("],
       },
-      // 格式化
-      documentFormattingProvider: true,
       // 语言高亮
       documentHighlightProvider: true,
     },
@@ -65,79 +69,99 @@ documents.listen(connection);
 // Listen on the connection
 connection.listen();
 
-import { version } from 'process';
+import { mainModule, version } from 'process';
+import { Console } from "console";
 console.log(`Version: ${version}`);
 
-import XRegExp = require('xregexp');
-const a = XRegExp.matchRecursive("((11),(22,(33,44)))", ',', '\\)', 'g');
-let ams: string;
-if (a == null) {
-  ams = "No Search";
-}
-else {
-  ams = a[0];
-}
-console.log(ams);
 
-// 增量错误诊断
-documents.onDidChangeContent((change) => {
-  const textDocument = change.document;
+// 全部的regmake，记录下来，用于随时获取
+let regmake: any[];
 
-  // The validator creates diagnostics for all uppercase words length 2 and more
-  const text = textDocument.getText();
-  const pattern = /\b[A-Z]{2,}\b/g;
-  let m: RegExpExecArray | null;
+// 全量诊断
+documents.onDidChangeContent((e) => {
+  const textDocument = e.document;
 
-  let problems = 0;
   const diagnostics: Diagnostic[] = [];
 
-  //const reg5 = /\((?:[^)(]+|\((?:[^)(]+|\([^)(]*\))*\))*\)/g;
+  //遍历上级目录
+  let uri = textDocument.uri;
+  let regmakeFilePath: null | string = null;
+  do {
+    // get parentpath
+    uri = uri.substring(0, uri.lastIndexOf('/'));
+    // find file if exist
+    // path join
+    const filePath = (uri + '/regmake.json').substring(7);
+    if (fs.existsSync(filePath)) {
+      const makes = reglace.getReglaceMake(filePath);
+      regmakeFilePath = filePath;
+      break;
+    }
+  } while (uri == 'file:///');
 
-  while ((m = pattern.exec(text))) {
-    problems++;
-    const diagnostic: Diagnostic = {
-      severity: DiagnosticSeverity.Warning,
+  if (regmakeFilePath == null) {
+    // 没有找到 regmake.json 文件
+    diagnostics.push({
+      severity: DiagnosticSeverity.Error,
       range: {
-        start: textDocument.positionAt(m.index),
-        end: textDocument.positionAt(m.index + m[0].length),
+        start: { line: 0, character: 0 },
+        end: { line: 0, character: 0 },
       },
-      message: `${m[0]} is all uppercase.`,
-      source: "Diagnostics Demo",
-    };
-    diagnostics.push(diagnostic);
+      message: 'No regmake.json found',
+      source: "reglace Make"
+    });
   }
+  else {
+    console.log(`regmakeFilePath: ${regmakeFilePath}`);
 
+    // 获取 reglace Make
+    regmake = reglace.getReglaceMake(regmakeFilePath);
+    console.log('regmake: ', regmake);
+    // 遍历json
+    for (const key in regmake) {
+      const r = regmake[key];
+
+      const rules = r["rules"];
+      const rcpps = r["replace"];
+
+      reglace.reglaceJss(rcpps, rules);
+    }
+
+    console.log(regmake);
+
+  }
   // Send the computed diagnostics to VSCode.
   connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
 });
 
 connection.onHover((params: HoverParams): Promise<Hover> => {
-  return Promise.resolve({
-    contents: ["Hover Demo"],
-  });
-});
 
-connection.onDocumentFormatting(
-  (params: DocumentFormattingParams): Promise<TextEdit[]> => {
-    const { textDocument } = params;
-    const doc = documents.get(textDocument.uri)!;
-    const text = doc.getText();
-    const pattern = /\b[A-Z]{3,}\b/g;
-    let match;
-    const res = [];
-    while ((match = pattern.exec(text))) {
-      res.push({
-        range: {
-          start: doc.positionAt(match.index),
-          end: doc.positionAt(match.index + match[0].length),
-        },
-        newText: match[0].replace(/(?<=[A-Z])[A-Z]+/, (r) => r.toLowerCase()),
-      });
+  let isSrc = false;
+  //find filepath in regmake.json
+  const filepath = params.textDocument.uri.substring(7);
+  for (const r of regmake) {
+    const rules = r["rules"];
+    const rcpps = r["replace"];
+    for (const rcpp of rcpps) {
+      if (fs.realpathSync(filepath) == fs.realpathSync(rcpp['src'])) {
+        isSrc = true;
+        break;
+      }
     }
-
-    return Promise.resolve(res);
   }
-);
+
+  if (isSrc) {
+    return Promise.resolve({
+      contents: ["A reglace src file: " + fs.realpathSync(filepath)]
+    });
+  }
+  else {
+    return Promise.resolve({
+      contents: []
+    });
+  }
+
+});
 
 connection.onDocumentHighlight(
   (params: DocumentHighlightParams): Promise<DocumentHighlight[]> => {

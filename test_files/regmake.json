@@ -1,24 +1,12 @@
 [
     {
         "rules": [
-            "rule1.reglace"
+            "asteria.mate.js"
         ],
         "replace": [
             {
-                "src": "test1.rcpp",
-                "out": "test1.cpp"
-            }
-        ]
-    },
-    {
-        "rules": [
-            "rule1.reglace",
-            "rule2.reglace"
-        ],
-        "replace": [
-            {
-                "src": "test2.rcpp",
-                "out": "test2.cpp"
+                "src": "asteria.mate",
+                "out": "asteria.cpp"
             }
         ]
     }

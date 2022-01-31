@@ -1,4 +1,4 @@
-mate A
+class A
 {
 public:
     A(){

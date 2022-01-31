@@ -1,0 +1,44 @@
+[
+    {
+        "name": "let_to_aut_0",
+        "rule": {
+            "search": "(^|[\\s\\n\\r])let([\\s\\n\\r])",
+            "replace": "$1auto$2"
+        }
+    },
+    {
+        "name": "function_0",
+        "rule": {
+            "search": "(\r\ntemp_function_parameters_ _ )",
+            "replace": "$1auto $6$1auto$2$3$4$5$7"
+        }
+    },
+    {
+        "name": "function_0",
+        "rule": {
+            "search": "(^|[\\s\\n\\r])function([\\s\\n\\r])(\\S+)(\\s*)(\\()([^\\)|^,]+)(\\))",
+            "replace": "\r\ntemp_function_parameters_ _ $6$1auto$2$3$4$5$7"
+        }
+    },
+    {
+        "name": "function_2",
+        "rule": {
+            "search": "(^|[\\s\\n\\r])function([\\s\\n\\r])(\\S+)(\\s*)(\\()([^\\)]*)(,)([^\\)]*)(, auto)",
+            "replace": "$1function$2$3$4$5$6$7 auto $8$9"
+        }
+    },
+    {
+        "name": "function_1",
+        "rule": {
+            "search": "(^|[\\s\\n\\r])function([\\s\\n\\r])(\\S+)(\\s*)(\\()([^\\)]*)(,)([^\\)]*)(\\))",
+            "replace": "$1function$2$3$4$5$6$7 auto $8$9"
+        }
+    },
+    {
+        "name": "function_0",
+        "rule": {
+            "search": "(^|[\\s\\n\\r])function([\\s\\n\\r])(\\S+)(\\s*)(\\()([^\\)]*)(\\))",
+            "replace": "$1auto$2$3$4$5$6$7"
+        }
+    }
+]

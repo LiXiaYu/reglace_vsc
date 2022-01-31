@@ -15,8 +15,7 @@
 			{
 				"id": "cpp",
 				"extensions": [
-					".rcpp",
-					".rh"
+					".mate"
 				]
 			},
 			{
