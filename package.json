@@ -1,9 +1,13 @@
 {
-	"name": "reglace_vsc",
+	"name": "reglace",
 	"description": "replace by regex",
 	"license": "MIT",
 	"version": "1.0.0",
 	"categories": [],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/LiXiaYu/reglace_vsc.git"
+	},
 	"engines": {
 		"vscode": "^1.43.0"
 	},
