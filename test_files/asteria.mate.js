@@ -38,8 +38,7 @@
             }).join(",");
             //replace old parameter string with new one
         }
-        console.log("1111:\n"+outFileContent.substring(0,index));
-        console.log("2222:\n"+outFileContent.substring(index+length));
+        
         outFileContent=outFileContent.substring(0,index)+newparameterstring+outFileContent.substring(index+length);
         addLength+=newparameterstring.length-length;
 
