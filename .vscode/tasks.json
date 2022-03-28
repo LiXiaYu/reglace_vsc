@@ -28,6 +28,11 @@
 			"problemMatcher": [
 				"$tsc-watch"
 			]
+		},
+		{
+			"label": "package",
+			"type": "shell",
+			"command": "vsce package"
 		}
 	]
 }

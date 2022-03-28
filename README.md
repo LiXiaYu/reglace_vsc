@@ -2,9 +2,7 @@
 
 Replace by regex
 
-
 Automatically replace and generate files according to the rules set by the user.
-
 
 Add a regmake.json in work dictionary.
 
@@ -35,5 +33,11 @@ Such as:
 return outFileContent
 });
 ```
+
+
+
+To facilitate comparison between src file and out file, vscode will automatically open the comparison window when the mouse points to the text.
+
+
 
 No more...
