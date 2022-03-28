@@ -63,7 +63,7 @@ const { Console } = require("console");
 
             if (temp_length_newparameterstring!=newparameterstring.length)
             {
-                outFileContent=outFileContent.substring(0,parameters_index+newparameterstring.length)+outFileContent.substring(parameters_index+newparameterstring.length).replace(/{/g,"{\n  auto __varg = __varg_make(__varg_ps...);\n")
+                outFileContent=outFileContent.substring(0,parameters_index+newparameterstring.length)+outFileContent.substring(parameters_index+newparameterstring.length).replace(/{/g,"{\n  auto __varg = __varg_make(__varg_ps...);\n");
             }
 
             //function keyword to auto

@@ -4,7 +4,8 @@
  * ------------------------------------------------------------------------------------------ */
 
 import * as path from 'path';
-import { workspace, ExtensionContext } from 'vscode';
+import { URL } from 'url';
+import { languages, workspace, ExtensionContext, Hover, Uri, commands } from 'vscode';
 
 import {
 	LanguageClient,
@@ -53,8 +54,16 @@ export function activate(context: ExtensionContext) {
 		clientOptions
 	);
 
-	// Start the client. This will also launch the server
-	client.start();
+	//custom actions
+	client.onReady().then(() => {
+		client.onNotification('custom/showdiffwindow', (params: Array<string>) => {
+			commands.executeCommand("vscode.diff", Uri.file(params[0]), Uri.file(params[1]));
+		});
+	});
+	context.subscriptions.push(client.start());
+
+	//// Start the client. This will also launch the server
+	//client.start();
 }
 
 export function deactivate(): Thenable<void> | undefined {

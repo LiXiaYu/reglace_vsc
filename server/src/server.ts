@@ -56,7 +56,9 @@ connection.onInitialize((params: InitializeParams) => {
         triggerCharacters: ["("],
       },
       // 语言高亮
-      documentHighlightProvider: true,
+      documentHighlightProvider: true
+      // code action
+
     },
   };
   return result;
@@ -118,9 +120,7 @@ documents.onDidChangeContent((e) => {
     regmake = reglace.getReglaceMake(regmakeFilePath);
     console.log('regmake: ', regmake);
     // 遍历json
-    for (const key in regmake) {
-      const r = regmake[key];
-
+    for (const r of regmake) {
       const rules = r["rules"];
       const rcpps = r["replace"];
 
@@ -137,6 +137,8 @@ documents.onDidChangeContent((e) => {
 connection.onHover((params: HoverParams): Promise<Hover> => {
 
   let isSrc = false;
+  let srcfilepath = '';
+  let outfilepath = '';
   //find filepath in regmake.json
   const filepath = params.textDocument.uri.substring(7);
   for (const r of regmake) {
@@ -145,14 +147,17 @@ connection.onHover((params: HoverParams): Promise<Hover> => {
     for (const rcpp of rcpps) {
       if (fs.realpathSync(filepath) == fs.realpathSync(rcpp['src'])) {
         isSrc = true;
+        outfilepath = fs.realpathSync(rcpp['out']);
+        srcfilepath = fs.realpathSync(rcpp['src']);
         break;
       }
     }
   }
 
   if (isSrc) {
+    connection.sendNotification('custom/showdiffwindow', [srcfilepath, outfilepath]);
     return Promise.resolve({
-      contents: ["A reglace src file: " + fs.realpathSync(filepath)]
+      contents: ["A reglace out file: " + outfilepath]
     });
   }
   else {
