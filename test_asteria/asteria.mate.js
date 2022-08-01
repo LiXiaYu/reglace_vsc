@@ -1,46 +1,3 @@
-# VSCode LSP Reglace
-
-Replace by regex
-
-Automatically replace and generate files according to the rules set by the user.
-
-Add a regmake.json in work dictionary.
-
-Such as
-
-```json
-[
-    {
-        "rules": [
-            "asteria.mate.js"
-        ],
-        "replace": [
-            {
-                "src": "asteria.mate",
-                "out": "asteria.cpp"
-            }
-        ]
-    }
-]
-```
-
-rule file is a javascript file contained a lambda function
-
-Such as:
-
-```javascript
-(function(srcFileContent){
-return outFileContent
-});
-```
-
-To facilitate comparison between src file and out file, vscode will automatically open the comparison window when the mouse points to the text.
-
-A Sample ([sample files is here](https://github.com/LiXiaYu/reglace_vsc/tree/test_asteria))
-
-*asteria.mate.js*
-
-```javascript
 const { Console } = require("console");
 
 /* eslint-disable no-undef */
@@ -117,7 +74,7 @@ const { Console } = require("console");
             let autokeyword = "auto";
             outFileContent = outFileContent.substring(0, function_index) + autokeyword + outFileContent.substring(function_index + match[functionkeywordSnumber].length);
             addLength += autokeyword.length - match[functionkeywordSnumber].length;
-        
+            
         }
     })();
 
@@ -125,87 +82,3 @@ const { Console } = require("console");
 
     return outFileContent;
 });
-```
-
-
-Reglace will read context from *asteria.mate*, run function in asteria.mate.js.
-
-```cpp
-var foo;
-// `foo` refers to a "variable" holding `null`.
-
-const inc = 42;
-// `inc` refers to an "immutable variable" holding an `integer` of `42`.
-
-var bar = func() { return->inc; }; // return by reference
-// `bar` refers to an "immutable variable" holding a function.
-// `bar()` refers to the same "variable" as `inc`.
-
-func add(x) { return x + inc; }; // return by value
-                                 // `add` refers to an "immutable variable" holding a function.
-                                 // `add(5)` refers to a "temporary" holding an `integer` of `47`.
-
-func pargs(a, b, ...) {
-  std.io.putf("named argument `a` = $1\n", a);
-  std.io.putf("named argument `b` = $1\n", b);
-
-  std.io.putf("variadic argument count = $1\n", __varg());
-  for(var i = 0; i != __varg(); ++i)
-    std.io.putf("variadic argument [$1] = $2\n", i, __varg(i));
-}
-```
-
-Then *asteria.cpp* will be generated.
-
-```cpp
-#include "asteria.mate.h"
-auto foo;
-// `foo` refers to a "variable" holding `null`.
-
-const auto inc = 42;
-// `inc` refers to an "immutable variable" holding an `integer` of `42`.
-
-auto bar = [&]() { return &inc; }; // return by reference
-// `bar` refers to an "immutable variable" holding a function.
-// `bar()` refers to the same "variable" as `inc`.
-
-auto add( auto x) { return x + inc; }; // return by value
-                                 // `add` refers to an "immutable variable" holding a function.
-                                 // `add(5)` refers to a "temporary" holding an `integer` of `47`.
-
-auto pargs( auto a, auto  b, auto  ... __varg_ps) {
-  auto __varg = __varg_make(__varg_ps...);
-
-  std.io.putf("named argument `a` = $1\n", a);
-  std.io.putf("named argument `b` = $1\n", b);
-
-  std.io.putf("variadic argument count = $1\n", __varg());
-  for(auto i = 0; i != __varg(); ++i)
-    std.io.putf("variadic argument [$1] = $2\n", i, __varg(i));
-}
-```
-
-In particular, the referenced header file *asteria.mate.h* requires the user to provide.
-
-```cpp
-#pragma once
-auto __varg_make(auto& ...__varg_ps)
-{
-    return [&](auto ...i) {
-        static_assert(sizeof...(i) == 0 || sizeof...(i) == 1, "__varg() parameters error");
-        auto __varg_il = { __varg_ps... };
-        if constexpr (sizeof...(i) == 0) {
-            return __varg_il.size();
-        }
-        else {
-            auto i_il = { i... };
-            return __varg_il.begin()[i_il.begin()[0]];
-        }
-    };
-}
-```
-
-
-
-
-No more...

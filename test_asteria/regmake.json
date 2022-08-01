@@ -1,0 +1,13 @@
+[
+    {
+        "rules": [
+            "asteria.mate.js"
+        ],
+        "replace": [
+            {
+                "src": "asteria.mate",
+                "out": "asteria.cpp"
+            }
+        ]
+    }
+]
