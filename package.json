@@ -1,5 +1,6 @@
 {
 	"name": "reglace",
+	"publisher": "LiXiaYu",
 	"description": "replace by regex",
 	"license": "MIT",
 	"version": "0.0.3",
