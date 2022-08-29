@@ -4,7 +4,7 @@ Replace by regex
 
 Automatically replace and generate files according to the rules set by the user.
 
-Add a regmake.json in work dictionary.
+Add a *regmake.json* in work dictionary.
 
 Such as
 
@@ -36,7 +36,7 @@ return outFileContent
 
 To facilitate comparison between src file and out file, vscode will automatically open the comparison window when the mouse points to the text.
 
-A Sample ([sample files is here](https://github.com/LiXiaYu/reglace_vsc/tree/test_asteria))
+## A Sample ([sample files is here](https://github.com/LiXiaYu/reglace_vsc/tree/test_asteria))
 
 *asteria.mate.js*
 
